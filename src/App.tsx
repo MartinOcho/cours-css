@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Editor from '@monaco-editor/react';
-import { BookOpen, Code, Layout, Play, CheckCircle, ChevronRight, FileCode2, AlertCircle, Trophy, Target, Star } from 'lucide-react';
+import { BookOpen, Code, Layout, Play, CheckCircle, ChevronRight, FileCode2, AlertCircle, Trophy, Target, Star, Lightbulb, Home } from 'lucide-react';
 import { cleanCss, hasCssSelector, hasCssProperty, validateCssRule } from './utils';
 
 // --- DONNÉES DES LEÇONS ---
@@ -48,8 +48,9 @@ const LESSONS = [
   {
     id: 1,
     title: "1. Le CSS en ligne (Inline)",
-    description: "Le CSS en ligne consiste à ajouter les styles directement à l'intérieur de la balise HTML en utilisant l'attribut **style**. C'est utile pour des modifications très rapides, mais déconseillé pour de gros projets car cela mélange la structure (HTML) et la présentation (CSS).",
+    description: "Le CSS en ligne consiste à ajouter les styles directement à l'intérieur de la balise HTML en utilisant l'attribut **style**. C'est utile pour des modifications très rapides, mais déconseillé pour de gros projets car cela mélange la structure (HTML) et la présentation (CSS). **Propriétés principales :** color (couleur du texte), background-color (couleur de fond), font-size (taille de police), etc.",
     task: "Modifiez l'attribut style du paragraphe pour que la couleur (color) soit rouge (red).",
+    hints: ["Utilisez l'attribut 'style' dans la balise <p>", "La propriété color définit la couleur du texte", "Les valeurs de couleur peuvent être des noms comme 'red' ou des codes hexadécimaux comme '#ff0000'"],
     initialHtml: `<!DOCTYPE html>
 <html>
 <head>
@@ -76,6 +77,7 @@ const LESSONS = [
     title: "2. Le CSS interne (Internal)",
     description: "Le CSS interne est placé dans la section **<head>** de votre page HTML, à l'intérieur d'une balise **<style>**. Cette méthode est pratique si vous avez une page web unique avec un style spécifique.",
     task: "Ajoutez une balise <style> dans le <head>. À l'intérieur, ciblez la balise 'h1' et donnez-lui la couleur bleue (blue).",
+    hints: ["La balise <style> doit être placée dans le <head>", "Utilisez h1 { color: blue; } dans le CSS", "Le sélecteur h1 cible tous les titres de niveau 1"],
     initialHtml: `<!DOCTYPE html>
 <html>
 <head>
@@ -103,8 +105,9 @@ const LESSONS = [
   {
     id: 3,
     title: "3. Le CSS externe (External)",
-    description: "C'est la méthode recommandée ! On crée un fichier séparé (ex: style.css) que l'on relie au HTML grâce à la balise **<link>** dans le **<head>**. Cela permet d'appliquer le même style à plusieurs pages facilement.",
+    description: "C'est la méthode recommandée ! On crée un fichier séparé (ex: style.css) que l'on relie au HTML grâce à la balise **<link>** dans le **<head>**. Cela permet d'appliquer le même style à plusieurs pages facilement. **Propriétés clés :** background-color (couleur de fond), color (couleur du texte), font-family (police), font-size (taille), margin (marges), padding (espacement interne).",
     task: "1. Vérifiez que la balise <link> est bien présente dans le HTML.\n2. Allez dans l'onglet 'Fichier CSS'.\n3. Ciblez la classe '.boite' et donnez-lui une couleur de fond (background-color) verte (green).",
+    hints: ["La balise <link> doit être dans le <head>", "Utilisez background-color: green; dans le CSS", "Ciblez .boite avec un point"],
     initialHtml: `<!DOCTYPE html>
 <html>
 <head>
@@ -139,6 +142,7 @@ const LESSONS = [
     title: "4. Les sélecteurs de type (Balises)",
     description: "Les sélecteurs de type ciblent directement les balises HTML (comme **p**, **h1**, **div**). C'est très utile pour définir le style de base de votre page. Par exemple, si vous ciblez **p**, tous les paragraphes de la page seront affectés d'un seul coup.",
     task: "Allez dans l'onglet CSS et ciblez toutes les balises 'p' pour changer leur couleur (color) en gris (gray).",
+    hints: ["Utilisez le sélecteur p pour cibler tous les paragraphes", "La propriété color définit la couleur du texte", "gray est une valeur de couleur valide"],
     initialHtml: `<!DOCTYPE html>
 <html>
 <head>
@@ -168,6 +172,7 @@ const LESSONS = [
     title: "5. Les sélecteurs de classe (.)",
     description: "L'attribut **class** permet de cibler des groupes d'éléments spécifiques, même s'ils ont des balises différentes. En CSS, on utilise un point (**.**) avant le nom de la classe pour la cibler. C'est le sélecteur le plus utilisé et le plus puissant au quotidien !",
     task: "Dans le CSS, ciblez la classe '.important' et donnez-lui une épaisseur de police (font-weight) en gras (bold).",
+    hints: ["Utilisez .important pour cibler la classe", "font-weight: bold; rend le texte gras", "Le point . est obligatoire pour les classes"],
     initialHtml: `<!DOCTYPE html>
 <html>
 <head>
@@ -195,6 +200,7 @@ const LESSONS = [
     title: "6. Les sélecteurs d'identifiant (#)",
     description: "L'attribut **id** est absolument unique : il ne doit être utilisé qu'une seule fois par page ! Il sert à cibler un élément structurel précis (comme un menu). En CSS, on utilise le symbole dièse (**#**) suivi du nom de l'identifiant.",
     task: "Dans le CSS, ciblez l'identifiant '#en-tete' et appliquez-lui une couleur de fond (background-color) noire (black) et une couleur de texte (color) blanche (white).",
+    hints: ["Utilisez #en-tete pour cibler l'ID", "background-color: black; pour le fond", "color: white; pour le texte", "Le # est obligatoire pour les IDs"],
     initialHtml: `<!DOCTYPE html>
 <html>
 <head>
@@ -226,6 +232,7 @@ const LESSONS = [
     title: "7. Sélecteurs descendants",
     description: "Les sélecteurs descendants ciblent les éléments qui sont descendants d'un autre élément. Par exemple, `div p` cible tous les paragraphes à l'intérieur de divs.",
     task: "Ciblez tous les paragraphes à l'intérieur de la div avec la classe 'container' et donnez-leur une couleur bleue.",
+    hints: ["Utilisez .container p pour cibler les descendants", "L'espace signifie 'à l'intérieur de'", "color: blue; définit la couleur"],
     initialHtml: `<!DOCTYPE html>
 <html>
 <head>
@@ -547,6 +554,7 @@ const LESSONS = [
     title: "17. Introduction à Flexbox",
     description: "Flexbox est un modèle de layout qui permet de créer des designs flexibles et responsives. Le conteneur flex distribue l'espace entre ses enfants.",
     task: "Transformez le conteneur en flexbox et alignez les éléments horizontalement.",
+    hints: ["Ajoutez display: flex; au conteneur", "Flexbox aligne les éléments horizontalement par défaut", "Le conteneur devient automatiquement un flex container"],
     initialHtml: `<!DOCTYPE html>
 <html>
 <head>
@@ -713,6 +721,7 @@ const LESSONS = [
     title: "21. Introduction à CSS Grid",
     description: "CSS Grid est un système de layout bidimensionnel qui permet de créer des designs complexes avec des lignes et colonnes.",
     task: "Créez une grille 3x3 avec display: grid et grid-template-columns.",
+    hints: ["Utilisez display: grid; sur le conteneur", "grid-template-columns: repeat(3, 1fr); crée 3 colonnes égales", "fr est l'unité de fraction pour les grilles"],
     initialHtml: `<!DOCTYPE html>
 <html>
 <head>
@@ -842,8 +851,33 @@ export default function App() {
   const [activeTab, setActiveTab] = useState('html'); // 'html' or 'css'
   const [isSuccess, setIsSuccess] = useState(false);
   const [completedLessons, setCompletedLessons] = useState(new Set<number>());
+  const [hasUserModified, setHasUserModified] = useState(false);
+  const [showHints, setShowHints] = useState(false);
+  const [currentView, setCurrentView] = useState<'home' | 'module-intro' | 'lesson'>('home');
+  const [selectedModule, setSelectedModule] = useState<number | null>(null);
 
-  const activeLesson = LESSONS.find(l => l.id === activeLessonId)!;
+  const activeLesson = LESSONS.find(l => l.id === activeLessonId);
+
+  // Vérification de sécurité : si la leçon n'existe pas, revenir à l'accueil
+  if (currentView === 'lesson' && !activeLesson) {
+    console.error(`Leçon avec ID ${activeLessonId} introuvable`);
+    setCurrentView('home');
+    return null;
+  }
+
+  // Charger la progression depuis localStorage
+  useEffect(() => {
+    const saved = localStorage.getItem('cssMasterProgress');
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      setCompletedLessons(new Set(parsed));
+    }
+  }, []);
+
+  // Sauvegarder la progression dans localStorage
+  useEffect(() => {
+    localStorage.setItem('cssMasterProgress', JSON.stringify([...completedLessons]));
+  }, [completedLessons]);
 
   const getProgress = () => {
     const totalLessons = LESSONS.length;
@@ -852,39 +886,216 @@ export default function App() {
   };
 
   const isLessonCompleted = (lessonId: number) => completedLessons.has(lessonId);
-  useEffect(() => {
-    setHtmlCode(activeLesson.initialHtml);
-    setCssCode(activeLesson.initialCss);
-    setActiveTab('html');
-    setIsSuccess(false);
-  }, [activeLessonId]);
 
-  // Validation en temps réel
-  useEffect(() => {
-    const success = activeLesson.validate(htmlCode, cssCode);
-    setIsSuccess(success);
-    if (success && !completedLessons.has(activeLessonId)) {
-      setCompletedLessons(prev => new Set([...prev, activeLessonId]));
-    }
-  }, [htmlCode, cssCode, activeLesson, activeLessonId, completedLessons]);
-
-  // Génération du contenu pour l'iframe
   const getSrcDoc = () => {
-    let finalHtml = htmlCode;
-
-    // Simulation du comportement du CSS Externe
-    if (activeLesson.isExternalSimulation) {
-      // Le CSS ne s'applique QUE si la balise <link> est présente
-      if (finalHtml.includes('href="style.css"') || finalHtml.includes("href='style.css'")) {
-        finalHtml = finalHtml.replace('</head>', `\n<style>${cssCode}</style>\n</head>`);
-      }
-    } else if (activeLesson.showCssTab) {
-      // Comportement normal si un onglet CSS existe sans simulation stricte
-      finalHtml = finalHtml.replace('</head>', `\n<style>${cssCode}</style>\n</head>`);
-    }
-
-    return finalHtml;
+    return `
+      <!DOCTYPE html>
+      <html lang="fr">
+      <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Aperçu</title>
+        <style>${cssCode}</style>
+      </head>
+      <body>
+        ${htmlCode}
+      </body>
+      </html>
+    `;
   };
+
+  useEffect(() => {
+    if (activeLesson) {
+      setHtmlCode(activeLesson.initialHtml);
+      setCssCode(activeLesson.initialCss);
+      setActiveTab('html');
+      setIsSuccess(false);
+      setHasUserModified(false);
+      setShowHints(false);
+    }
+  }, [activeLessonId, activeLesson]);
+
+  // Validation en temps réel seulement après modification par l'utilisateur
+  useEffect(() => {
+    if (hasUserModified && activeLesson) {
+      const success = activeLesson.validate(htmlCode, cssCode);
+      setIsSuccess(success);
+      if (success && !completedLessons.has(activeLessonId)) {
+        setCompletedLessons(prev => new Set([...prev, activeLessonId]));
+      }
+    }
+  }, [htmlCode, cssCode, activeLesson, activeLessonId, completedLessons, hasUserModified]);
+
+  const handleModuleClick = (moduleId: number) => {
+    setSelectedModule(moduleId);
+    setCurrentView('module-intro');
+  };
+
+  const handleStartLesson = (lessonId: number) => {
+    setActiveLessonId(lessonId);
+    setCurrentView('lesson');
+  };
+
+  const handleBackToHome = () => {
+    setCurrentView('home');
+    setSelectedModule(null);
+  };
+
+  const renderModuleIntro = () => {
+    const module = MODULES.find(m => m.id === selectedModule)!;
+    const moduleLessons = LESSONS.filter(l => module.lessons.includes(l.id));
+
+    return (
+      <div className="min-h-screen bg-gray-900 text-gray-100 font-sans p-8">
+        <div className="max-w-4xl mx-auto">
+          <button
+            onClick={handleBackToHome}
+            className="flex items-center text-blue-400 hover:text-blue-300 mb-6"
+          >
+            <Home size={20} className="mr-2" />
+            Retour à l'accueil
+          </button>
+
+          <div className="bg-gray-800 rounded-lg p-8">
+            <h1 className="text-4xl font-bold mb-4 flex items-center text-blue-400">
+              {module.id === 1 && <Code className="mr-3" size={32} />}
+              {module.id === 2 && <Target className="mr-3" size={32} />}
+              {module.id === 3 && <Layout className="mr-3" size={32} />}
+              {module.id === 4 && <Play className="mr-3" size={32} />}
+              {module.id === 5 && <Star className="mr-3" size={32} />}
+              {module.id === 6 && <Trophy className="mr-3" size={32} />}
+              {module.title}
+            </h1>
+
+            <p className="text-xl text-gray-300 mb-8 leading-relaxed">
+              {module.description}
+            </p>
+
+            <div className="mb-8">
+              <h2 className="text-2xl font-semibold mb-4 text-yellow-400">Ce que vous allez apprendre :</h2>
+              <div className="grid md:grid-cols-2 gap-4">
+                {moduleLessons.map((lesson) => (
+                  <div key={lesson.id} className="bg-gray-700 p-4 rounded-lg">
+                    <h3 className="font-semibold text-blue-300 mb-2">{lesson.title}</h3>
+                    <p className="text-sm text-gray-400 mb-3" 
+                       dangerouslySetInnerHTML={{ __html: lesson.description.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') }} 
+                    />
+                    <div className="mb-3">
+                      <strong className="text-yellow-300 text-sm">Mission :</strong>
+                      <p className="text-gray-300 text-sm mt-1">{lesson.task}</p>
+                      {lesson.hints && lesson.hints.length > 0 && (
+                        <div className="mt-2">
+                          <details className="text-yellow-400 text-sm">
+                            <summary className="cursor-pointer hover:text-yellow-300">💡 Indices ({lesson.hints.length})</summary>
+                            <ul className="mt-2 space-y-1">
+                              {lesson.hints.map((hint, index) => (
+                                <li key={index} className="text-yellow-100 text-xs flex items-start">
+                                  <span className="text-yellow-400 mr-2">•</span>
+                                  {hint}
+                                </li>
+                              ))}
+                            </ul>
+                          </details>
+                        </div>
+                      )}
+                    </div>
+                    <button
+                      onClick={() => handleStartLesson(lesson.id)}
+                      className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded transition-colors"
+                    >
+                      Commencer cette leçon
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="text-center">
+              <button
+                onClick={() => handleStartLesson(module.lessons[0])}
+                className="bg-green-600 hover:bg-green-700 text-white py-3 px-8 rounded-lg text-lg font-semibold transition-colors"
+              >
+                Commencer le chapitre complet
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  const renderHome = () => (
+    <div className="min-h-screen bg-gray-900 text-gray-100 font-sans p-8">
+      <div className="max-w-6xl mx-auto">
+        <div className="text-center mb-12">
+          <h1 className="text-6xl font-bold mb-4 flex items-center justify-center text-blue-400">
+            <Layout className="mr-4" size={64} />
+            CSS Master
+          </h1>
+          <p className="text-2xl text-gray-300 mb-8">Apprenez le CSS par la pratique interactive</p>
+          
+          <div className="bg-gray-800 rounded-lg p-6 inline-block">
+            <div className="flex justify-between items-center mb-4">
+              <span className="text-lg text-gray-300">Votre progression :</span>
+              <span className="text-2xl text-blue-400 font-bold">{getProgress()}%</span>
+            </div>
+            <div className="w-full bg-gray-700 rounded-full h-4">
+              <div 
+                className="bg-blue-500 h-4 rounded-full transition-all duration-300"
+                style={{ width: `${getProgress()}%` }}
+              ></div>
+            </div>
+            <p className="text-sm text-gray-500 mt-2">
+              {completedLessons.size} / {LESSONS.length} leçons complétées
+            </p>
+          </div>
+        </div>
+
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {MODULES.map((module) => (
+            <div key={module.id} className="bg-gray-800 rounded-lg p-6 hover:bg-gray-750 transition-colors cursor-pointer" onClick={() => handleModuleClick(module.id)}>
+              <div className="flex items-center mb-4">
+                {module.id === 1 && <Code className="text-blue-400 mr-3" size={32} />}
+                {module.id === 2 && <Target className="text-blue-400 mr-3" size={32} />}
+                {module.id === 3 && <Layout className="text-blue-400 mr-3" size={32} />}
+                {module.id === 4 && <Play className="text-blue-400 mr-3" size={32} />}
+                {module.id === 5 && <Star className="text-blue-400 mr-3" size={32} />}
+                {module.id === 6 && <Trophy className="text-blue-400 mr-3" size={32} />}
+                <h2 className="text-xl font-bold">{module.title}</h2>
+              </div>
+              <p className="text-gray-400 mb-4">{module.description}</p>
+              <div className="flex justify-between items-center">
+                <span className="text-sm text-gray-500">
+                  {module.lessons.length} leçons
+                </span>
+                <ChevronRight className="text-blue-400" size={24} />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+
+  if (currentView === 'home') {
+    return renderHome();
+  }
+
+  if (currentView === 'module-intro') {
+    return renderModuleIntro();
+  }
+
+  // Vue leçon (existante)
+  if (!activeLesson) {
+    return (
+      <div className="min-h-screen bg-gray-900 text-gray-100 font-sans p-8 flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-red-400 mb-4">Erreur</h1>
+          <p className="text-gray-300">Leçon introuvable. Retour à l'accueil...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex h-screen bg-gray-900 text-gray-100 font-sans overflow-hidden">
@@ -892,9 +1103,18 @@ export default function App() {
       {/* BARRE LATÉRALE - Navigation des leçons */}
       <div className="w-80 bg-gray-800 border-r border-gray-700 flex flex-col">
         <div className="p-6 border-b border-gray-700">
-          <h1 className="text-2xl font-bold flex items-center text-blue-400">
-            <Layout className="mr-3" /> CSS Master
-          </h1>
+          <div className="flex items-center justify-between mb-4">
+            <h1 className="text-2xl font-bold flex items-center text-blue-400">
+              <Layout className="mr-3" /> CSS Master
+            </h1>
+            <button
+              onClick={() => setCurrentView('home')}
+              className="text-gray-400 hover:text-white transition-colors"
+              title="Retour à l'accueil"
+            >
+              <Home size={20} />
+            </button>
+          </div>
           <p className="text-sm text-gray-400 mt-2">Apprenez par la pratique</p>
           
           {/* Barre de progression */}
@@ -975,9 +1195,33 @@ export default function App() {
           
           <div className="bg-blue-900/40 border border-blue-700/50 p-4 rounded-lg flex items-start">
             <AlertCircle className="text-blue-400 mr-3 mt-1 shrink-0" size={20} />
-            <div>
-              <strong className="block text-blue-300 mb-1">Mission :</strong>
+            <div className="flex-1">
+              <div className="flex items-center justify-between mb-1">
+                <strong className="block text-blue-300">Mission :</strong>
+                {activeLesson.hints && (
+                  <button
+                    onClick={() => setShowHints(!showHints)}
+                    className="flex items-center text-yellow-400 hover:text-yellow-300 text-sm"
+                  >
+                    <Lightbulb size={16} className="mr-1" />
+                    {showHints ? 'Masquer les indices' : 'Afficher les indices'}
+                  </button>
+                )}
+              </div>
               <p className="text-blue-100 whitespace-pre-line">{activeLesson.task}</p>
+              {showHints && activeLesson.hints && (
+                <div className="mt-3 p-3 bg-yellow-900/20 border border-yellow-700/50 rounded">
+                  <strong className="text-yellow-300 block mb-2">Indices :</strong>
+                  <ul className="text-yellow-100 text-sm space-y-1">
+                    {activeLesson.hints.map((hint, index) => (
+                      <li key={index} className="flex items-start">
+                        <span className="text-yellow-400 mr-2">•</span>
+                        {hint}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -1017,7 +1261,10 @@ export default function App() {
                   height="100%"
                   language="html"
                   value={htmlCode}
-                  onChange={(value) => setHtmlCode(value || '')}
+                  onChange={(value) => {
+                    setHtmlCode(value || '');
+                    setHasUserModified(true);
+                  }}
                   theme="vs-dark"
                   options={{
                     minimap: { enabled: false },
@@ -1034,7 +1281,10 @@ export default function App() {
                   height="100%"
                   language="css"
                   value={cssCode}
-                  onChange={(value) => setCssCode(value || '')}
+                  onChange={(value) => {
+                    setCssCode(value || '');
+                    setHasUserModified(true);
+                  }}
                   theme="vs-dark"
                   options={{
                     minimap: { enabled: false },
